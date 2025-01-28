@@ -38,6 +38,3 @@
 *.app
 
 __pycache__
-
-#data directory with large files
-test/data

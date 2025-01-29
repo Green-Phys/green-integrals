@@ -28,8 +28,7 @@ TEST_CASE("Integral version", "[Input]") {
   p.parse(args);
   int verbose = 1;
   green::symmetry::brillouin_zone_utils<green::symmetry::inv_symm_op> bz_utils(p);
-  // TODO: Transition std::cerr in df_buffered_reader.h to green::integrals::integrals_outdated_input
-  // REQUIRE_THROWS_AS(df_integral_t(df_int_path_1, 2, 36, bz_utils, verbose), green::integrals::integrals_outdated_input);
-  // REQUIRE_THROWS_AS(df_integral_t(df_int_path_2, 2, 36, bz_utils, verbose), green::integrals::integrals_outdated_input);
+  REQUIRE_THROWS_AS(df_integral_t(df_int_path_1, 2, 36, bz_utils, verbose), green::integrals::integrals_outdated_input);
+  REQUIRE_THROWS_AS(df_integral_t(df_int_path_2, 2, 36, bz_utils, verbose), green::integrals::integrals_outdated_input);
   REQUIRE_NOTHROW(df_integral_t(df_int_path_3, 2, 36, bz_utils, verbose));
 }

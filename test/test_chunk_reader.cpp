@@ -50,7 +50,6 @@ TEST_CASE("InitBasePath","[chunk_reader]") {
   int number_of_keys=chunks_per_file*total_files;
   std::string df_path=TEST_PATH+"/Si/df_int"s;
 
-  if(!std::filesystem::exists(df_path)){ std::cerr<<"hdf5 data not found. aborting test"<<std::endl; return;}
 
   chunk_reader c(df_path, number_of_keys, naux, nao); //test these numbers
 
@@ -66,7 +65,6 @@ TEST_CASE("ReadSomething","[chunk_reader]") {
   int number_of_keys=chunks_per_file*total_files;
   std::string df_path=TEST_PATH+"/Si/df_int"s;
 
-  if(!std::filesystem::exists(df_path)){ std::cerr<<"hdf5 data not found. aborting test"<<std::endl; return;}
   chunk_reader c(df_path, number_of_keys, naux, nao,true); //test these numbers
 
   Eigen::VectorXd data(c.element_size());

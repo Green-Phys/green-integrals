@@ -27,8 +27,6 @@ TEST_CASE("Init","[ReadingSI]") {
   int number_of_keys=chunks_per_file*total_files;
   std::string df_path = TEST_PATH + "/Si/df_int"s;
 
-  if(!std::filesystem::exists(df_path)){ std::cerr<<"hdf5 data not found. aborting test"<<std::endl; return;}
-
   chunk_reader c(df_path, number_of_keys, naux, nao, true); //test these numbers
   buffer b(c.element_size(), number_of_keys, 1000, &c);
 
@@ -45,7 +43,6 @@ TEST_CASE("ReadAllIntsConsecutively","[ReadingSI]") {
   int number_of_keys=chunks_per_file*total_files;
   std::string df_path = TEST_PATH + "/Si/df_int"s;
 
-  if(!std::filesystem::exists(df_path)){ std::cerr<<"hdf5 data not found. aborting test"<<std::endl; return;}
   chunk_reader c(df_path, number_of_keys, naux, nao); //test these numbers
   buffer b(c.element_size(), number_of_keys, 1000, &c, 2);
 
@@ -65,7 +62,6 @@ TEST_CASE("ReadAllIntsSmallBuffer","[ReadingSI]") {
   int n_buffered_elem=100;
   std::string df_path = TEST_PATH + "/Si/df_int"s;
 
-  if(!std::filesystem::exists(df_path)){ std::cerr<<"hdf5 data not found. aborting test"<<std::endl; return;}
   chunk_reader c(df_path, number_of_keys, naux, nao,true); //test these numbers
   buffer b(c.element_size(), number_of_keys, n_buffered_elem, &c);
 
@@ -84,7 +80,6 @@ TEST_CASE("ReadAllIntsConsecutivelyLargeStride","[ReadingSI]") {
   int number_of_keys=chunks_per_file*total_files;
   std::string df_path = TEST_PATH + "/Si/df_int"s;
 
-  if(!std::filesystem::exists(df_path)){ std::cerr<<"hdf5 data not found. aborting test"<<std::endl; return;}
   chunk_reader c(df_path, number_of_keys, naux, nao,true); //test these numbers
   buffer b(c.element_size(), number_of_keys, number_of_keys, &c, 0, false);
 

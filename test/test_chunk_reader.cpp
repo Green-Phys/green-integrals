@@ -7,12 +7,23 @@
 #include <filesystem>
 
 
+// For these tests of reading integrals as chunks, we use cooked up density-fitted integrals.
+// system           :   Silicon
+// k-mesh           :   2x2x2
+// basis            :   gth-dzvp-molopt-sr
+// pseudo           :   gth-pbe
+// size per file    :   1MB
+// beta (df params) :   2.0
+// diffuse_cutoff   :   0.3
+
+using namespace std::string_literals;
+
 TEST_CASE("ReadFakeData","[reader]") {
 
-  int chunks_per_file=336;
-  int total_files=36;
-  int nao=26;
-  int naux=200;
+  int chunks_per_file=18;
+  int total_files=2;
+  int nao=8;
+  int naux=36;
   int number_of_keys=chunks_per_file*total_files;
 
   reader c("no_such_file", number_of_keys, naux, nao); //test these numbers
@@ -29,38 +40,36 @@ TEST_CASE("Init","[chunk_reader]") {
 
   chunk_reader c;
 }
-//these tests are straight from the Si 6x6x6 example
+
 TEST_CASE("InitBasePath","[chunk_reader]") {
 
-  int chunks_per_file=336;
-  int total_files=36;
-  int nao=26;
-  int naux=200;
+  int chunks_per_file=18;
+  int total_files=2;
+  int nao=8;
+  int naux=36;
   int number_of_keys=chunks_per_file*total_files;
+  std::string df_path=TEST_PATH+"/Si/df_int"s;
 
-  if(!std::filesystem::exists(TEST_PATH)){ std::cerr<<"hdf5 data not found. aborting test"<<std::endl; return;}
 
-  chunk_reader c(TEST_PATH, number_of_keys, naux, nao); //test these numbers
+  chunk_reader c(df_path, number_of_keys, naux, nao); //test these numbers
 
   REQUIRE(c.chunk_indices()[0]==0);
-  REQUIRE(c.chunk_indices()[1]==336);
-  REQUIRE(c.chunk_indices()[35]==11760);
+  REQUIRE(c.chunk_indices()[1]==18);
 }
 
 TEST_CASE("ReadSomething","[chunk_reader]") {
-  int chunks_per_file=336;
-  int total_files=36;
-  int nao=26;
-  int naux=200;
+  int chunks_per_file=18;
+  int total_files=2;
+  int nao=8;
+  int naux=36;
   int number_of_keys=chunks_per_file*total_files;
+  std::string df_path=TEST_PATH+"/Si/df_int"s;
 
-  if(!std::filesystem::exists(TEST_PATH)){ std::cerr<<"hdf5 data not found. aborting test"<<std::endl; return;}
-  chunk_reader c(TEST_PATH, number_of_keys, naux, nao,true); //test these numbers
+  chunk_reader c(df_path, number_of_keys, naux, nao,true); //test these numbers
 
   Eigen::VectorXd data(c.element_size());
   c.read_key(0, &(data[0]));
-  REQUIRE_THAT(data[0], Catch::Matchers::WithinAbs(5.26945, 1.e-5));
-  c.read_key(335, &(data[0]));
-  c.read_key(336, &(data[0]));
-  c.read_key(2000, &(data[0]));
+  REQUIRE_THAT(data[0], Catch::Matchers::WithinAbs(1.5409454, 1.e-5));
+  c.read_key(17, &(data[0]));
+  c.read_key(18, &(data[0]));
 }

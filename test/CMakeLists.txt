@@ -13,17 +13,19 @@ list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 
 add_executable(integrals_test
 test_chunk_reader.cpp
-test_access_counter.cpp		#test_hash.cpp
+test_access_counter.cpp
 test_age_out_buffer.cpp		test_main.cpp
 test_buffer.cpp			test_mpi.cpp
 test_bufferedSI.cpp		test_shared_memory_region.cpp
+test_integral_version.cpp
 )
-target_compile_definitions(integrals_test PRIVATE TEST_PATH="${CMAKE_CURRENT_SOURCE_DIR}/../../../../hdf5")
+
+target_compile_definitions(integrals_test PRIVATE TEST_PATH="${CMAKE_CURRENT_SOURCE_DIR}/data")
 
 target_link_libraries(integrals_test
         PRIVATE
         Catch2::Catch2WithMain
-        GREEN::INTEGRALS)
+        GREEN::INTEGRALS GREEN::SYMMETRY GREEN::UTILS)
 
 include(CTest)
 include(Catch)

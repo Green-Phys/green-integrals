@@ -43,7 +43,7 @@ namespace green::integrals{
    * @return true if v >= INPUT_VERSION
    * @return false otherwise
    */
-  bool CheckVersion(const std::string& v) {
+  inline bool CheckVersion(const std::string& v) {
     int major_Vin, minor_Vin, patch_Vin;
     int major_Vref, minor_Vref, patch_Vref;
   

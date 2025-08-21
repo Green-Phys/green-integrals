@@ -20,6 +20,7 @@ TEST_CASE("Integral version", "[Input]") {
   std::string df_int_path_1 = TEST_PATH + "/Input/df_int"s;
   std::string df_int_path_2 = TEST_PATH + "/Input/df_int_x"s;
   std::string df_int_path_3 = TEST_PATH + "/Input/df_int_y"s;
+  std::string df_int_path_4 = TEST_PATH + "/Input/df_int_0.3.0"s;
   std::string args =
       "test --restart 0 --itermax 2 --E_thr 1e-13 --mixing_type G_MIXING --mixing_weight 0.8 --input_file=" + input_file +
       " --BETA 100 --verbose=1 --dfintegral_file=" + df_int_path_1 +
@@ -31,4 +32,5 @@ TEST_CASE("Integral version", "[Input]") {
   REQUIRE_THROWS_AS(df_integral_t(df_int_path_1, 2, 36, bz_utils, verbose), green::integrals::integrals_outdated_input);
   REQUIRE_THROWS_AS(df_integral_t(df_int_path_2, 2, 36, bz_utils, verbose), green::integrals::integrals_outdated_input);
   REQUIRE_NOTHROW(df_integral_t(df_int_path_3, 2, 36, bz_utils, verbose));
+  REQUIRE_NOTHROW(df_integral_t(df_int_path_4, 2, 36, bz_utils, verbose));
 }

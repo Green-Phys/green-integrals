@@ -36,6 +36,7 @@ TEST_CASE("Integral version", "[Input]") {
 }
 
 TEST_CASE("Version Strings") {
+  std::vector<std::string> err_versions = {"0.2", "0.3", "0.4b10"};
   std::vector<std::string> fail_versions = {"0.2.0", "0.2.3"};
   std::vector<std::string> pass_versions = {
     "0.2.4", "0.2.4b10", "0.3.0", "0.3.0b8", "0.3.1", "0.3.1b10"
@@ -45,5 +46,9 @@ TEST_CASE("Version Strings") {
   }
   for (int i=0; i < pass_versions.size(); i++) {
     REQUIRE(green::integrals::CheckVersion(pass_versions[i]));
+  }
+  for (int i=0; i < err_versions.size(); i++) {
+    auto* oldBuffer = std::cerr.rdbuf();
+    REQUIRE_THROWS_WITH(green::integrals::CheckVersion(err_versions[i]), "Incorrect format of version string!");
   }
 }

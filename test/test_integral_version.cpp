@@ -40,10 +40,10 @@ TEST_CASE("Version Strings") {
   std::vector<std::string> pass_versions = {
     "0.2.4", "0.2.4b10", "0.3.0", "0.3.0b8", "0.3.1", "0.3.1b10"
   };
-  for (int i=0; i < fail_versions.size() - 1; i++) {
+  for (int i=0; i < fail_versions.size(); i++) {
     REQUIRE_FALSE(green::integrals::CheckVersion(fail_versions[i]));
   }
-  for (int i=0; i < pass_versions.size() - 1; i++) {
+  for (int i=0; i < pass_versions.size(); i++) {
     REQUIRE(green::integrals::CheckVersion(pass_versions[i]));
   }
 }

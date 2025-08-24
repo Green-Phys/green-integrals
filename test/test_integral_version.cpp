@@ -20,6 +20,7 @@ TEST_CASE("Integral version", "[Input]") {
   std::string df_int_path_1 = TEST_PATH + "/Input/df_int"s;
   std::string df_int_path_2 = TEST_PATH + "/Input/df_int_x"s;
   std::string df_int_path_3 = TEST_PATH + "/Input/df_int_y"s;
+  std::string df_int_path_4 = TEST_PATH + "/Input/df_int_0.3.0"s;
   std::string args =
       "test --restart 0 --itermax 2 --E_thr 1e-13 --mixing_type G_MIXING --mixing_weight 0.8 --input_file=" + input_file +
       " --BETA 100 --verbose=1 --dfintegral_file=" + df_int_path_1 +
@@ -31,4 +32,23 @@ TEST_CASE("Integral version", "[Input]") {
   REQUIRE_THROWS_AS(df_integral_t(df_int_path_1, 2, 36, bz_utils, verbose), green::integrals::integrals_outdated_input);
   REQUIRE_THROWS_AS(df_integral_t(df_int_path_2, 2, 36, bz_utils, verbose), green::integrals::integrals_outdated_input);
   REQUIRE_NOTHROW(df_integral_t(df_int_path_3, 2, 36, bz_utils, verbose));
+  REQUIRE_NOTHROW(df_integral_t(df_int_path_4, 2, 36, bz_utils, verbose));
+}
+
+TEST_CASE("Version Strings") {
+  std::vector<std::string> err_versions = {"0.2", "0.3", "0.4b10"};
+  std::vector<std::string> fail_versions = {"0.2.0", "0.2.3"};
+  std::vector<std::string> pass_versions = {
+    "0.2.4", "0.2.4b10", "0.3.0", "0.3.0b8", "0.3.1", "0.3.1b10"
+  };
+  for (int i=0; i < fail_versions.size(); i++) {
+    REQUIRE_FALSE(green::integrals::CheckVersion(fail_versions[i]));
+  }
+  for (int i=0; i < pass_versions.size(); i++) {
+    REQUIRE(green::integrals::CheckVersion(pass_versions[i]));
+  }
+  for (int i=0; i < err_versions.size(); i++) {
+    auto* oldBuffer = std::cerr.rdbuf();
+    REQUIRE_THROWS_WITH(green::integrals::CheckVersion(err_versions[i]), "Incorrect format of version string!");
+  }
 }

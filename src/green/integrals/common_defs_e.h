@@ -22,10 +22,12 @@
 #ifndef INTEGRALS_COMMON_DEFS_E_H
 #define INTEGRALS_COMMON_DEFS_E_H
 #include<string>
+#include<cstdio>
 
 namespace green::integrals{
 
   static const std::string INPUT_VERSION = "0.2.4";
+  static const int VERSION_SUFFIX_BUFF_SIZE = 32;
 
   enum integral_symmetry_type_e {
     direct, conjugated, transposed
@@ -34,5 +36,42 @@ namespace green::integrals{
   enum integral_reading_type {
     chunks, as_a_whole
   };
+
+  /**
+   * @brief Compare two version strings
+   * 
+   * @param v (std::string)
+   * @return true if v >= INPUT_VERSION
+   * @return false otherwise
+   */
+  inline bool CheckVersion(const std::string& v) {
+    int major_Vin, minor_Vin, patch_Vin;
+    int major_Vref, minor_Vref, patch_Vref;
+  
+    char suffixV[VERSION_SUFFIX_BUFF_SIZE] = "";
+    char suffixM[VERSION_SUFFIX_BUFF_SIZE] = "";
+  
+    int n_v = std::sscanf(
+      v.c_str(),
+      ("%d.%d.%d%" + std::to_string(VERSION_SUFFIX_BUFF_SIZE-1) + "s").c_str(),
+      &major_Vin, &minor_Vin, &patch_Vin, suffixV
+    );
+    int n_ref = std::sscanf(
+      INPUT_VERSION.c_str(),
+      ("%d.%d.%d%" + std::to_string(VERSION_SUFFIX_BUFF_SIZE - 1) + "s").c_str(),
+      &major_Vref, &minor_Vref, &patch_Vref, suffixM
+    );
+  
+    if (n_v < 3 || n_ref < 3) {
+      throw std::runtime_error("Incorrect format of version string!");
+    }
+    if (major_Vin != major_Vref) return major_Vin > major_Vref;
+    if (minor_Vin != minor_Vref) return minor_Vin > minor_Vref;
+    if (patch_Vin != patch_Vref) return patch_Vin > patch_Vref;
+  
+    // If numeric parts in version are all equal, do not worry about suffix
+    // e.g., 0.2.4b10 has same integral format as 0.2.4
+    return true;
+  }
 }
 #endif //INTEGRALS_COMMON_DEFS_E_H
